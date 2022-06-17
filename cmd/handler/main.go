@@ -2,11 +2,12 @@ package main
 
 import (
 	"context"
+	"github.com/JayJamieson/go-lambda/handlers"
 	"log"
 	"os"
 	"time"
 
-	"github.com/JayJamieson/go-lambda/handler"
+	"github.com/aws/aws-lambda-go/events"
 )
 
 func main() {
@@ -19,13 +20,15 @@ func main() {
 	ctx, cancel := context.WithDeadline(context.Background(), lambdaMaxRuntime)
 	defer cancel()
 
-	handler := handler.NewHandler()
+	handler := handlers.New()
 
-	err := handler(ctx)
+	// setup event from cli args or reading from file
+	event := events.APIGatewayProxyRequest{}
+
+	_, err := handler(ctx, event)
 
 	if err != nil {
 		log.Fatal(err.Error())
-		os.Exit(0)
 	}
 
 	os.Exit(0)

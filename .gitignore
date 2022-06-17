@@ -16,3 +16,6 @@
 bin/main
 bin/main.local
 function.zip
+bootstrap
+
+.idea

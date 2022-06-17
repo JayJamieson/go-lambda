@@ -2,7 +2,7 @@ FROM amazonlinux:latest
 
 RUN yum install -y tar xz gzip gcc
 
-RUN curl -L -o golang.tar.gz https://go.dev/dl/go1.18.3.linux-amd64.tar.gz
+RUN curl -L -o golang.tar.gz https://go.dev/dl/go1.20.7.linux-amd64.tar.gz
 
 RUN  rm -rf /usr/local/go && tar -C /usr/local -xzf golang.tar.gz
 
