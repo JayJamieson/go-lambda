@@ -6,3 +6,5 @@ docker run -it -v $(pwd):/project lambda-build go build -o ./bin/main ./main.go
 rm function.zip
 
 zip -j function.zip ./bin/main
+
+cp function.zip ./infrastructure
