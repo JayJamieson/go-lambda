@@ -72,3 +72,11 @@ resource "aws_iam_role_policy_attachment" "lambda_policy_attachment" {
   role       = aws_iam_role.lambda_iam_role.name
   policy_arn = aws_iam_policy.lambda_execution_policy.arn
 }
+
+output "lambda_function_arn" {
+  value = aws_lambda_function.go_lambda.invoke_arn
+}
+
+output "lambda_function_name" {
+  value = aws_lambda_function.go_lambda.function_name
+}

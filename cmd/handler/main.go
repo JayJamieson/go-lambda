@@ -7,6 +7,7 @@ import (
 	"time"
 
 	"github.com/JayJamieson/go-lambda/handler"
+	"github.com/aws/aws-lambda-go/events"
 )
 
 func main() {
@@ -21,7 +22,7 @@ func main() {
 
 	handler := handler.NewHandler()
 
-	err := handler(ctx)
+	_, err := handler(ctx, events.APIGatewayProxyRequest{})
 
 	if err != nil {
 		log.Fatal(err.Error())

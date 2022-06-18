@@ -6,9 +6,10 @@ import (
 )
 
 func main() {
-	//https://docs.aws.amazon.com/lambda/latest/dg/golang-handler.html
-	//NewHandler returns handler function this is useful for passing
-	//in environment configurations and dependencies
+	// https://docs.aws.amazon.com/lambda/latest/dg/golang-handler.html
+	// NewHandler returns handler function this is useful for passing
+	// in environment configurations and dependencies
+
 	handler := handler.NewHandler()
 	lambda.Start(handler)
 }

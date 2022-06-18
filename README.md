@@ -24,3 +24,13 @@ but this is not tested and behaviour is undefined
 ## Deploy
 
 - `aws lambda update-function-code --function-name go-lambda --zip-file fileb://function.zip`
+
+```tf
+data "archive_file" "lambda_code" {
+  type        = "zip"
+  source_dir  = "${path.module}/function_code"
+  output_path = "${path.module}/function_code.zip"
+}
+```
+
+<https://github.com/awslabs/aws-lambda-go-api-proxy>
