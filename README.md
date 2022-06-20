@@ -39,3 +39,7 @@ Create a `terraform.tfvars` file inside infrastructure folder and fill out requi
 Currently the lambda handler takes in any request method and path. For full utilization of api gateway proxy functionality you can make use of <https://github.com/awslabs/aws-lambda-go-api-proxy> to run a standard Go http server and adapt api gateway requests to Go requests and vice versa Go responses to api gateway responses
 
 It should be noted that doing this it is worth while writing a api that has fast startup times and utilizes as much of aws services. Or operate in a stateless architecture that has all required state in requests.
+
+## Future work
+
+- [] add github actions to build and deploy changes on main branch merge
