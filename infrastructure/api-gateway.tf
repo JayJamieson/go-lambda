@@ -79,7 +79,6 @@ resource "aws_api_gateway_usage_plan" "lambda_api_usage" {
   }
 }
 
-
 resource "aws_api_gateway_api_key" "lambda_api_key" {
   name = "developer"
 }
@@ -88,13 +87,4 @@ resource "aws_api_gateway_usage_plan_key" "lambda_api_key_usage_plan" {
   key_id        = aws_api_gateway_api_key.lambda_api_key.id
   key_type      = "API_KEY"
   usage_plan_id = aws_api_gateway_usage_plan.lambda_api_usage.id
-}
-
-output "api_name" {
-  description = "ID of the EC2 instance"
-  value       = aws_api_gateway_rest_api.lambda_api.name
-}
-
-output "lambda_api_resource_url" {
-  value = "${aws_api_gateway_deployment.lambda_api_deployment.invoke_url}${aws_api_gateway_stage.lambda_api_stage.stage_name}${aws_api_gateway_resource.lambda_api_resource.path}"
 }

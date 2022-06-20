@@ -1,16 +1,16 @@
-data "aws_route53_zone" "jaythedeveloper_zone" {
-  name = "jaythedeveloper.tech."
+data "aws_route53_zone" "lambda_api_root_zone" {
+  name = var.root_zone_domain
 }
 
 resource "aws_acm_certificate" "certificate" {
-  domain_name       = "lambda.jaythedeveloper.tech"
+  domain_name       = var.lambda_rest_api_sub_domain_name
   validation_method = "DNS"
 }
 
 resource "aws_route53_record" "certificate_validation" {
   name    = tolist(aws_acm_certificate.certificate.domain_validation_options)[0].resource_record_name
   type    = tolist(aws_acm_certificate.certificate.domain_validation_options)[0].resource_record_type
-  zone_id = data.aws_route53_zone.jaythedeveloper_zone.zone_id
+  zone_id = data.aws_route53_zone.lambda_api_root_zone.zone_id
   records = [tolist(aws_acm_certificate.certificate.domain_validation_options)[0].resource_record_value]
   ttl     = 60
 }
@@ -21,7 +21,7 @@ resource "aws_acm_certificate_validation" "certificate_validation" {
 }
 
 resource "aws_api_gateway_domain_name" "domain_name" {
-  domain_name              = "lambda.jaythedeveloper.tech"
+  domain_name              = var.lambda_rest_api_sub_domain_name
   regional_certificate_arn = aws_acm_certificate_validation.certificate_validation.certificate_arn
 
   endpoint_configuration {
@@ -38,9 +38,9 @@ resource "aws_api_gateway_base_path_mapping" "path_mapping" {
 }
 
 resource "aws_route53_record" "sub_domain" {
-  name    = "lambda.jaythedeveloper.tech"
+  name    = var.lambda_rest_api_sub_domain_name
   type    = "A"
-  zone_id = data.aws_route53_zone.jaythedeveloper_zone.zone_id
+  zone_id = data.aws_route53_zone.lambda_api_root_zone.zone_id
 
   alias {
     name                   = aws_api_gateway_domain_name.domain_name.regional_domain_name
@@ -48,7 +48,3 @@ resource "aws_route53_record" "sub_domain" {
     evaluate_target_health = false
   }
 }
-
-# list-hosted-zones
-
-# list-hosted-zones-by-name
