@@ -1,6 +1,6 @@
 # go-lambda
 
-**AWS has [deprecated go1.x](https://aws.amazon.com/blogs/compute/migrating-aws-lambda-functions-from-the-go1-x-runtime-to-the-custom-runtime-on-amazon-linux-2/) runtime.
+**AWS has [deprecated go1.x](https://aws.amazon.com/blogs/compute/migrating-aws-lambda-functions-from-the-go1-x-runtime-to-the-custom-runtime-on-amazon-linux-2/) runtime.**
 
 This repository contains example lambda handler integration with API gateway. Terraform is used to deploy infrastructure including DNS, SSL Certificates.
 
@@ -50,4 +50,4 @@ Currently, the lambda handler takes in any request method and path. For full uti
 
 ## Future work
 
-- [ ] add github action to build and deploy changes on main branch merge
+- [ ] add GitHub action to build and deploy changes on main branch merge
