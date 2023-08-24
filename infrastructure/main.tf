@@ -24,11 +24,10 @@ resource "aws_lambda_function" "go_lambda" {
   handler          = "bootstrap"
   architectures    = ["x86_64"]
   filename         = "bootstrap.zip"
-  source_code_hash = filebase64sha256("bootstrap.zip")
+  source_code_hash = data.archive_file.lambda.output_base64sha256
   runtime          = "provided.al2"
   timeout          = 900
   depends_on = [
-    data.archive_file.lambda,
     aws_iam_role_policy_attachment.lambda_policy_attachment
   ]
 }
