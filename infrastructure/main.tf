@@ -11,6 +11,8 @@ provider "aws" {
   region = var.region
 }
 
+data "aws_caller_identity" "current" {}
+
 data "archive_file" "lambda" {
   type        = "zip"
   source_file  = "bootstrap"
@@ -59,7 +61,7 @@ resource "aws_iam_policy" "lambda_execution_policy" {
         Action = ["logs:CreateLogGroup"]
         Effect = "Allow"
         Resource = [
-          "arn:aws:logs:ap-southeast-2:834849242330:*"
+          "arn:aws:logs:${var.region}:${data.aws_caller_identity.current.account_id}:*"
         ]
       },
       {
@@ -68,7 +70,7 @@ resource "aws_iam_policy" "lambda_execution_policy" {
           "logs:CreateLogStream",
           "logs:PutLogEvents"
         ],
-        Resource = "arn:aws:logs:ap-southeast-2:834849242330:log-group:*"
+        Resource = "arn:aws:logs:${var.region}:${data.aws_caller_identity.current.account_id}:log-group:*"
       }
     ]
   })

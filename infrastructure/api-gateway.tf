@@ -54,7 +54,7 @@ resource "aws_lambda_permission" "api_gateway_lambda" {
   action        = "lambda:InvokeFunction"
   function_name = aws_lambda_function.go_lambda.function_name
   principal     = "apigateway.amazonaws.com"
-  source_arn    = "arn:aws:execute-api:ap-southeast-2:834849242330:${aws_api_gateway_rest_api.lambda_api.id}/*"
+  source_arn    = "arn:aws:execute-api:${var.region}:${data.aws_caller_identity.current.account_id}:${aws_api_gateway_rest_api.lambda_api.id}/*"
 }
 
 resource "aws_api_gateway_usage_plan" "lambda_api_usage" {

@@ -15,6 +15,7 @@ This repository contains example lambda handler integration with API gateway. Te
 ## Setup (optional)
 
 ### Docker
+
 Although not require specifically to run go in lambdas, can be useful to avoid compatibility issues
 when using cgo bindings or third party libraries using cgo such as sqlite3.
 
