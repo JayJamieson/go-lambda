@@ -8,11 +8,6 @@ variable "lambda_rest_api_sub_domain_name" {
   default     = "api.example.com"
 }
 
-variable "image_uri" {
-  description = "URI to docker image without tag"
-  nullable    = false
-}
-
 variable "image_tag" {
   description = "Container image tag"
   default     = "latest"

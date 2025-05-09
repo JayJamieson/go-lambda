@@ -17,20 +17,33 @@ resource "aws_lambda_function" "go_lambda" {
   function_name = "go-demo"
 
   role          = aws_iam_role.lambda_iam_role.arn
-  handler       = "bootstrap"
   architectures = ["x86_64"]
-  image_uri     = "${var.image_uri}:${var.image_tag}"
+  image_uri     = "${aws_ecr_repository.go_lambda.repository_url}:${var.image_tag}"
   package_type  = "Image"
-  runtime       = "provided.al2"
   timeout       = 900
 
   depends_on = [
-    aws_iam_role_policy_attachment.lambda_policy_attachment
+    aws_iam_role_policy_attachment.lambda_policy_attachment,
+    aws_ecr_repository.go_lambda
   ]
 }
 
+resource "aws_ecr_repository" "go_lambda" {
+  name                 = "go-lambda"
+  image_tag_mutability = "MUTABLE"
+
+  image_scanning_configuration {
+    scan_on_push = false
+  }
+}
+
+resource "aws_lambda_function_url" "go_lambda" {
+  function_name      = aws_lambda_function.go_lambda.function_name
+  authorization_type = "NONE"
+}
+
 resource "aws_iam_role" "lambda_iam_role" {
-  name               = "lambda-execution-role"
+  name               = "demo-lambda-execution-role"
   assume_role_policy = data.aws_iam_policy_document.lambda_assume_role_policy.json
 }
 
@@ -46,7 +59,7 @@ data "aws_iam_policy_document" "lambda_assume_role_policy" {
 }
 
 resource "aws_iam_policy" "lambda_execution_policy" {
-  name        = "demo-lambda-basic-execution"
+  name        = "demo-lambda-basic-execution-policy"
   description = "policy to allow basic execution of lambda"
 
   policy = jsonencode({
@@ -82,4 +95,12 @@ output "lambda_function_arn" {
 
 output "lambda_function_name" {
   value = aws_lambda_function.go_lambda.function_name
+}
+
+output "lambda_function_url" {
+  value = aws_lambda_function_url.go_lambda.function_url
+}
+
+output "ecr_repository" {
+  value = aws_ecr_repository.go_lambda.repository_url
 }
