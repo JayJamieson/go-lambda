@@ -13,22 +13,17 @@ provider "aws" {
 
 data "aws_caller_identity" "current" {}
 
-data "archive_file" "lambda" {
-  type        = "zip"
-  source_file  = "bootstrap"
-  output_path = "bootstrap.zip"
-}
-
 resource "aws_lambda_function" "go_lambda" {
   function_name = "go-demo"
 
-  role             = aws_iam_role.lambda_iam_role.arn
-  handler          = "bootstrap"
-  architectures    = ["x86_64"]
-  filename         = "bootstrap.zip"
-  source_code_hash = data.archive_file.lambda.output_base64sha256
-  runtime          = "provided.al2"
-  timeout          = 900
+  role          = aws_iam_role.lambda_iam_role.arn
+  handler       = "bootstrap"
+  architectures = ["x86_64"]
+  image_uri     = "${var.image_uri}:${var.image_tag}"
+  package_type  = "Image"
+  runtime       = "provided.al2"
+  timeout       = 900
+
   depends_on = [
     aws_iam_role_policy_attachment.lambda_policy_attachment
   ]
