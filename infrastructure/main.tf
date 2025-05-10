@@ -13,28 +13,40 @@ provider "aws" {
 
 data "aws_caller_identity" "current" {}
 
+data "external" "ecr_image" {
+  count = var.with_docker_build ? 1 : 0
+
+  program = [
+    "bash", "-c",
+    <<-EOC
+      # change into the parent directory of this module
+      cd "${path.module}/.." && \
+      # invoke your build script with all required flags (and optional tag)
+      ./build_image.sh \
+        --account-id "${data.aws_caller_identity.current.account_id}" \
+        --region "${var.region}" \
+        --repo-name "${var.repo_name}" \
+        ${var.image_tag != "" ? "--tag ${var.image_tag}" : ""} \
+    EOC
+  ]
+
+}
+
 resource "aws_lambda_function" "go_lambda" {
   function_name = "go-demo"
 
   role          = aws_iam_role.lambda_iam_role.arn
   architectures = ["x86_64"]
-  image_uri     = "${aws_ecr_repository.go_lambda.repository_url}:${var.image_tag}"
+
+  image_uri = "${var.with_docker_build == true ? data.external.ecr_image[0].result.image_uri : "${var.ecr_repository_uri}/${var.repo_name}:${var.image_tag}"}"
+
   package_type  = "Image"
   timeout       = 900
 
   depends_on = [
     aws_iam_role_policy_attachment.lambda_policy_attachment,
-    aws_ecr_repository.go_lambda
+    data.external.ecr_image
   ]
-}
-
-resource "aws_ecr_repository" "go_lambda" {
-  name                 = "go-lambda"
-  image_tag_mutability = "MUTABLE"
-
-  image_scanning_configuration {
-    scan_on_push = false
-  }
 }
 
 resource "aws_lambda_function_url" "go_lambda" {
@@ -99,8 +111,4 @@ output "lambda_function_name" {
 
 output "lambda_function_url" {
   value = aws_lambda_function_url.go_lambda.function_url
-}
-
-output "ecr_repository" {
-  value = aws_ecr_repository.go_lambda.repository_url
 }

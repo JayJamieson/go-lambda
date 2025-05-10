@@ -10,7 +10,7 @@ COPY main.go .
 
 RUN CGO_ENABLED=0 go build -tags lambda.norpc -o main main.go
 
-FROM public.ecr.aws/lambda/provided.al2
+FROM public.ecr.aws/lambda/provided:al2
 
 COPY --from=build /project/main ./main
 
