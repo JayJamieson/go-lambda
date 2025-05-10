@@ -19,3 +19,8 @@ function.zip
 bootstrap
 
 .idea
+infrastructure/.terraform
+infrastructure/.terraform.lock.hcl
+infrastructure/.terraform/providers/registry.terraform.io/hashicorp/aws/5.13.1/linux_amd64/terraform-provider-aws_v5.13.1_x5
+infrastructure/terraform.tfstate
+infrastructure/terraform.tfstate.backup

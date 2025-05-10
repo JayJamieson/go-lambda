@@ -1,15 +1,17 @@
-FROM amazonlinux:2.0.20230727.0
-
-RUN yum install -y tar xz gzip gcc
-
-RUN curl -L -o golang.tar.gz https://go.dev/dl/go1.21.0.linux-amd64.tar.gz
-
-RUN rm -rf /usr/local/go && tar -C /usr/local -xzf golang.tar.gz
+FROM golang:1.22 AS build
 
 WORKDIR /project
 
 COPY go.mod go.sum ./
-RUN /usr/local/go/bin/go mod download -x
+RUN go mod download -x
 
-RUN /usr/local/go/bin/go install github.com/mattn/go-sqlite3
-ENV PATH="${PATH}:/usr/local/go/bin"
+COPY handlers/ handlers/
+COPY main.go .
+
+RUN CGO_ENABLED=0 go build -tags lambda.norpc -o main main.go
+
+FROM public.ecr.aws/lambda/provided:al2
+
+COPY --from=build /project/main ./main
+
+ENTRYPOINT [ "./main" ]
