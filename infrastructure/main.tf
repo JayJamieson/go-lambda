@@ -38,10 +38,10 @@ resource "aws_lambda_function" "go_lambda" {
   role          = aws_iam_role.lambda_iam_role.arn
   architectures = ["x86_64"]
 
-  image_uri = "${var.with_docker_build == true ? data.external.ecr_image[0].result.image_uri : "${var.ecr_repository_uri}/${var.repo_name}:${var.image_tag}"}"
+  image_uri = var.with_docker_build == true ? data.external.ecr_image[0].result.image_uri : "${var.ecr_repository_uri}/${var.repo_name}:${var.image_tag}"
 
-  package_type  = "Image"
-  timeout       = 900
+  package_type = "Image"
+  timeout      = 900
 
   depends_on = [
     aws_iam_role_policy_attachment.lambda_policy_attachment,
