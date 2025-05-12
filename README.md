@@ -41,6 +41,8 @@ Usage: ./build_image.sh --account-id ID --region REGION --repo-name NAME [--tag 
   --tag          Image tag override; if omitted, use latest Git tag on HEAD
 ```
 
+If you want to create and push smaller slim images then please install [slimtoolkit/slim](https://github.com/slimtoolkit/slim). You can then optionally pass `--slim-image` to minify images and push to ECR.
+
 ## Deploy
 
 Create a `terraform.tfvars` file inside infrastructure folder and fill out required variables.

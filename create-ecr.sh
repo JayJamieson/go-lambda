@@ -30,7 +30,7 @@ while [[ $# -gt 0 ]]; do
     --repo-name)  REPO_NAME="$2";   shift 2 ;;
     --region)     REGION="$2";      shift 2 ;;
     --account-id) ACCOUNT_ID="$2";  shift 2 ;;
-    --auth-only)  AUTH_ONLY=true;   shift    ;;
+    --auth-only)  AUTH_ONLY=true;   shift   ;;
     -h|--help)    usage ;;
     *) echo -e "${RED}Unknown option: $1${NC}" >&2; usage ;;
   esac
